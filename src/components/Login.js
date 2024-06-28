@@ -1,7 +1,22 @@
-import React from "react";
+import React, { useRef, useState } from "react";
 import Header from "./common/Header";
+import { emailAndPasswordValidator } from "../utils/utils";
 
 const Login = () => {
+  const email = useRef(null);
+  const password = useRef(null);
+  const [error, setError] = useState(null);
+  const handleLogin = ()=>{
+    // Validation
+    const validation = emailAndPasswordValidator(email.current.value, password.current.value);
+    if(validation?.noError) {
+      // API call to login
+      console.log("Login Successful");
+    } else {
+      setError(validation);
+    }
+  }
+
   return (
     <div className="h-screen">
       <Header />
@@ -13,15 +28,17 @@ const Login = () => {
         />
       </div>
       <div className="flex items-center justify-center h-full">
-        <form
+        <form onSubmit={(e)=> e.preventDefault()}
           className="flex justify-center flex-col 
       w-1/3 m-auto p-12 bg-black/[0.8]"
         >
           <h1 className="text-3xl font-semibold text-white mb-4">Sign In</h1>
           <section className="w-full my-2 relative z-0">
             <input
+            ref={email}
               type="email"
               id="email"
+              onChange={()=> setError()}
               placeholder=" "
               className="block w-full p-3 rounded-md bg-transparent text-white
               border border-[#808080b3] outline-none duration-200 peer"
@@ -35,9 +52,14 @@ const Login = () => {
             >
               Email
             </span>
+            <span>
+              {error && !error?.isEmailValid && <p className="text-red-500 text-xs">Invalid Email</p>}
+            </span>
           </section>
           <section className="w-full my-2 relative z-0">
             <input
+            ref={password}
+            onChange={()=> setError()}
               type="password"
               id="password"
               placeholder=" "
@@ -54,8 +76,11 @@ const Login = () => {
             >
               Password
             </span>
+            {error && !error?.isPasswordValid && <p className="text-red-500 text-xs">Invalid Password</p>}
           </section>
-          <button className="bg-netflix-red text-white w-full rounded-md h-10 mt-4">
+          <button className="bg-netflix-red text-white w-full rounded-md h-10 mt-4"
+          onClick={handleLogin}
+          >
             Sign In
           </button>
           <div className="text-white mt-16">

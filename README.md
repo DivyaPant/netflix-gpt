@@ -2,6 +2,8 @@
 
 - Create react app
 - Configured Tailwind CSS
+- Header
+- Login --> Form > Validations
 
 
 
@@ -18,5 +20,5 @@
             -Lists of Movies * Vertical Scroll + Horizontal Scroll
 -NetflixGPT
     - Search Bar
-    -Movie Suggestions
+    - Movie Suggestions
         

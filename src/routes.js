@@ -1,7 +1,7 @@
 import Login from "./components/Login";
 import Browse from "./components/Browse";
 
-export default [
+const routes =  [
     {
         path: '/',
         element: <Login/>
@@ -10,4 +10,5 @@ export default [
         path: '/browse',
         element: <Browse/>
     }
-]
+];
+export default routes;
