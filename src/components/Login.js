@@ -1,17 +1,49 @@
 import React, { useRef, useState } from "react";
 import Header from "./common/Header";
 import { emailAndPasswordValidator } from "../utils/utils";
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../utils/firebase";
+import { useNavigate } from "react-router-dom";
+
 
 const Login = () => {
   const email = useRef(null);
   const password = useRef(null);
+  const navigate = useNavigate();
   const [error, setError] = useState(null);
+  const [signUp, setSignUp] = useState(false);
   const handleLogin = ()=>{
     // Validation
     const validation = emailAndPasswordValidator(email.current.value, password.current.value);
     if(validation?.noError) {
-      // API call to login
-      console.log("Login Successful");
+      if(signUp) {
+         // API call to sign up
+         createUserWithEmailAndPassword(auth, email.current.value, password.current.value)
+         .then((userCredential) => {
+           // Signed up 
+           const user = userCredential.user;
+           navigate("/browse");
+
+         }).catch((error) => {
+           const errorCode = error.code;
+           const errorMessage = error.message;
+           // ..
+         });
+       
+      } else {
+ // API call to login
+ signInWithEmailAndPassword(auth, email.current.value, password.current.value)
+  .then((userCredential) => {
+    // Signed in 
+    const user = userCredential.user;
+    navigate("/browse");
+    // ...
+  })
+  .catch((error) => {
+    const errorCode = error.code;
+    const errorMessage = error.message;
+  });
+      }
     } else {
       setError(validation);
     }
@@ -32,7 +64,7 @@ const Login = () => {
           className="flex justify-center flex-col 
       w-1/3 m-auto p-12 bg-black/[0.8]"
         >
-          <h1 className="text-3xl font-semibold text-white mb-4">Sign In</h1>
+          <h1 className="text-3xl font-semibold text-white mb-4">{signUp ? "Sign Up" : "Sign In"}</h1>
           <section className="w-full my-2 relative z-0">
             <input
             ref={email}
@@ -46,7 +78,7 @@ const Login = () => {
             <span
               className="absolute text-white left-0 mx-2
             duration-200 peer-placeholder-shown:scale-100 
-            transform -translate-y-6 scale-75 top-3 -z-10 origin-[0]
+            transform -translate-y-6 scale-75 top-3 origin-[0]
             peer-placeholder-shown:translate-y-0 peer-focus:scale-75 
             peer-focus:-translate-y-6 peer-placeholder-shown:-z-10 peer-focus:z-10"
             >
@@ -81,10 +113,11 @@ const Login = () => {
           <button className="bg-netflix-red text-white w-full rounded-md h-10 mt-4"
           onClick={handleLogin}
           >
-            Sign In
+            {signUp ? "Sign Up" : "Sign In"}
+        
           </button>
-          <div className="text-white mt-16">
-            New to Netflix?<b> Sign up now</b>
+          <div className="text-white mt-16 cursor-pointer w-fit" onClick={()=>setSignUp(!signUp)}>
+            New to Netflix?<b>{!signUp ? ' Sign Up' : ' Sign In'} now</b>
           </div>
         </form>
       </div>
