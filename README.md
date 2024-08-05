@@ -4,6 +4,9 @@
 - Configured Tailwind CSS
 - Header
 - Login --> Form > Validations
+- Store the token data in redux
+- Complete header
+- Signout
 
 
 

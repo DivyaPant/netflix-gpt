@@ -1,12 +1,12 @@
-import { createBrowserRouter } from 'react-router-dom';
-import { RouterProvider } from 'react-router-dom';
-import routes from '../routes';
+import Header from './common/Header';
+import { Outlet } from 'react-router-dom';
 
 const Body = () => {
-    const appRouter = createBrowserRouter(routes);
+   
   return (
     <div>
-       <RouterProvider router={appRouter}/>
+      <Header/>
+      <Outlet/>
     </div>
   )
 }

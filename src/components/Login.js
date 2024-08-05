@@ -4,9 +4,12 @@ import { emailAndPasswordValidator } from "../utils/utils";
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../utils/firebase";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { updateUserDetails } from "../redux/slice/userDetails";
 
 
 const Login = () => {
+  const dispatch = useDispatch();
   const email = useRef(null);
   const password = useRef(null);
   const navigate = useNavigate();
@@ -22,6 +25,10 @@ const Login = () => {
          .then((userCredential) => {
            // Signed up 
            const user = userCredential.user;
+           dispatch(updateUserDetails({
+            accessToken : user.accessToken,
+            email: user.email
+          }))
            navigate("/browse");
 
          }).catch((error) => {
@@ -36,6 +43,10 @@ const Login = () => {
   .then((userCredential) => {
     // Signed in 
     const user = userCredential.user;
+    dispatch(updateUserDetails({
+      accessToken : user.accessToken,
+      email: user.email
+    }))
     navigate("/browse");
     // ...
   })
@@ -51,7 +62,6 @@ const Login = () => {
 
   return (
     <div className="h-screen">
-      <Header />
       <div className="absolute h-screen w-full -z-10">
         <img
           src="https://assets.nflxext.com/ffe/siteui/vlv3/a56dc29b-a0ec-4f6f-85fb-50df0680f80f/2f8ae902-8efe-49bb-9a91-51b6fcc8bf46/IN-en-20240617-popsignuptwoweeks-perspective_alpha_website_small.jpg"

@@ -3,7 +3,7 @@ import Browse from "./components/Browse";
 
 const routes =  [
     {
-        path: '/',
+        path: '/login',
         element: <Login/>
     },
     {
